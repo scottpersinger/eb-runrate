@@ -14,8 +14,14 @@
 			color:#999;
 		}
 	</style>
+	<script>
+		var key = '';
+		function get_key() {
+			key = prompt("Enter key");
+		}
+	</script>
 </head>
-<body>
+<body onload="get_key()">
 	<h1>Top Apps by Number of Dynos</h1>
 	<div id="topapps" style="width:100%;height:100%">
 	</div>
@@ -23,7 +29,7 @@
 	<script>
 		var first = true;
 		function load_list() {
-			$.getJSON('/topapps', function(results) {
+			$.getJSON('/topapps?key=' + key, function(results) {
 				var words = results.map(function(node) {
 					return {text: node.app, weight:node.dynos,
 							afterWordRender: function() {

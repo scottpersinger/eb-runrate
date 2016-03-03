@@ -145,6 +145,10 @@ redis.get("__partition_offsets", function(err, initial_offsets) {
 // == Setup Express API to return top apps
 
 app.get('/topapps', function(request, response) {
+    if (request.query.key != '98ZGHT34') {
+        response.json([]);
+        return;
+    }
     redis.zrange(['topapps', 0, -1, "WITHSCORES"], function(err, data) {
         var results = [];
         for (var i = 0; i < data.length; i+=2) {
