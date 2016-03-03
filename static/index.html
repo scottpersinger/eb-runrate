@@ -1,0 +1,47 @@
+<html>
+<head>
+	<link href="jqcloud.css" rel="stylesheet"></link>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script src="jqcloud.js"></script>
+	<style>
+		.dynos {
+			position:absolute;
+			right:-14px;
+			bottom:0px;
+			font-size:0.4em;
+			background-color:#f5dd99;
+			font-weight:bold;
+			color:#999;
+		}
+	</style>
+</head>
+<body>
+	<h1>Top Apps by Number of Dynos</h1>
+	<div id="topapps" style="width:100%;height:100%">
+	</div>
+
+	<script>
+		var first = true;
+		function load_list() {
+			$.getJSON('/topapps', function(results) {
+				var words = results.map(function(node) {
+					return {text: node.app, weight:node.dynos,
+							afterWordRender: function() {
+								if (node.dynos >= 40) {
+									this.append("<div class=\"dynos\">" + node.dynos + "</div>");
+								}
+							}};
+				});
+				if (first) {
+					first = false;
+					$('#topapps').jQCloud(words, {autoResize: true});
+				} else {
+					$('#topapps').jQCloud('update', words, {autoResize: true});
+				}
+			});
+		}
+		load_list();
+		setInterval(load_list, 2000);
+	</script>
+</body>
+</html>
