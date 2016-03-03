@@ -11,6 +11,7 @@ var fs          = require('fs'),
 app.use(express.static('static'));
 
 LEADERBOARD_LIMIT = 30
+DYNO_SIZES = require('./dyno_sizes');
 
 function connect_eventbus(initial_offsets) {
     EVENTBUS_SOCKET_URL = "wss://eventbus-sub.api.herokai.com";
@@ -65,12 +66,12 @@ function connect_eventbus(initial_offsets) {
                 if (formation.dynos == undefined) {
                     formation.dynos = {}
                 }
-                formation.dynos[message.data.size] = message.data.quantity;
+                formation.dynos[message.data.type] = message.data.quantity;
 
                 // Total up dynos of all sizes
                 var total = 0;
                 for (var k in formation.dynos) {
-                    total += formation.dynos[k];
+                    total += formation.dynos[k] * (DYNO_SIZES[k] || 1);
                     redis.zadd(['topapps',-total,app])
                     redis.zremrangebyrank(['topapps', LEADERBOARD_LIMIT, -1])
                 }
