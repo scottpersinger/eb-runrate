@@ -13,3 +13,4 @@ and draws the leaderboard as a word cloud.
 
 ![Screenshot](/static/screenshot.png)
 
+![Interaction Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/scottpersinger/eb-runrate/master/eb-interact.txt)
